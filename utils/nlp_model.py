@@ -3,8 +3,11 @@ NLP Emotion Detection Module
 Analyzes stories and tags them with emotional themes
 """
 
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import re
+try:
+    from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+except (ImportError, ModuleNotFoundError):
+    from vaderSentiment import SentimentIntensityAnalyzer
 
 # Initialize VADER sentiment analyzer
 vader_analyzer = SentimentIntensityAnalyzer()

@@ -6,9 +6,14 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-import plotly.express as px
-import plotly.graph_objects as go
-
+# Plotly imports with error handling
+try:
+    import plotly.express as px
+    import plotly.graph_objects as go
+except ImportError:
+    st.error("Plotly is not installed. Please add 'plotly>=5.18.0' to requirements.txt")
+    st.stop()
+    
 from utils.database import (
     get_all_stories, 
     get_story_count, 
