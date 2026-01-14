@@ -2,11 +2,13 @@
 Insights Dashboard - For Latina wellness practitioners
 Basic analytics view (will enhance with emotion tagging in Week 2)
 """
-
 import streamlit as st
 import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
 import plotly.express as px
 import plotly.graph_objects as go
+
 from utils.database import (
     get_all_stories, 
     get_story_count, 
@@ -28,7 +30,6 @@ from utils.export_data import (
 from utils.translations import get_text, get_language_toggle, set_language
 from utils.ui_helpers import add_custom_css, show_loading
 from utils.auth import check_admin_access, logout, get_current_user
-from datetime import datetime, timedelta
 
 # Page configuration
 st.set_page_config(
