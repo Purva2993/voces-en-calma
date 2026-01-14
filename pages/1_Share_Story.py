@@ -11,7 +11,7 @@ from utils.privacy import (
     get_privacy_notice,
     get_consent_text
 )
-from utils.nlp_model import detect_emotion, get_emotion_label_display
+from utils.nlp_model import detect_emotion
 from utils.translations import get_text, get_language_toggle, set_language
 from utils.ui_helpers import add_custom_css, show_loading
 
