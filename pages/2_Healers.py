@@ -158,7 +158,7 @@ col1, col2 = st.columns([1, 2])
 
 with col1:
     # Placeholder for Luz's image
-    st.image("/Users/purvamugdiya/Desktop/VEC/images/Luz_image.png", use_column_width=True)
+    st.image("images/Luz_image.png", use_column_width=True)
 
 with col2:
     st.markdown("""
