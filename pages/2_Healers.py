@@ -1,173 +1,233 @@
 """
-Healers Directory Page - Meet our Latina wellness practitioners
+Healers Directory Page
+Showcases wellness practitioners serving the Latina community
 """
 
 import streamlit as st
-from utils.translations import get_text, get_language_toggle, set_language
-from utils.ui_helpers import add_custom_css
 
 # Page configuration
 st.set_page_config(
-    page_title="Our Circle of Healers - Voces en Calma",
+    page_title="Healers - Voces en Calma",
     page_icon="🌺",
-    layout="centered"
+    layout="wide"
 )
 
-# Add custom CSS
-add_custom_css()
+# Get current language
+lang = st.session_state.get('language', 'en')
 
-# Get current language (set globally in Home.py)
-lang = get_language_toggle()
-
-# Custom CSS for healer cards
+# Custom CSS for healer cards with side-by-side layout
 st.markdown("""
-    <style>
-    .healer-card {
-        background-color: #F5EFE7;
-        padding: 1.5em;
-        border-radius: 15px;
-        margin: 1.5em 0;
-        border-left: 5px solid #D4846E;
+<style>
+    .healer-container {
+        display: flex;
+        gap: 30px;
+        align-items: flex-start;
+        background: linear-gradient(135deg, #f9f7f4 0%, #ffffff 100%);
+        border-left: 4px solid #d4a574;
+        padding: 30px;
+        border-radius: 12px;
+        margin: 30px 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .healer-image {
+        flex: 0 0 300px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .healer-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+    }
+    .healer-content {
+        flex: 1;
     }
     .healer-name {
-        color: #D4846E;
-        font-size: 1.5em;
-        font-weight: 700;
-        margin-bottom: 0.3em;
+        color: #8b6f47;
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 5px;
     }
     .healer-title {
-        color: #6B5B95;
+        color: #a0826d;
+        font-size: 16px;
         font-style: italic;
-        margin-bottom: 1em;
+        margin-bottom: 20px;
     }
     .healer-bio {
-        color: #2C3E50;
-        line-height: 1.6;
+        color: #333;
+        line-height: 1.8;
+        margin: 15px 0;
+        font-size: 15px;
     }
-    .practice-tag {
-        background-color: #8B9D83;
+    .healer-specialty {
+        background: #8b6f47;
         color: white;
-        padding: 0.3em 0.8em;
-        border-radius: 15px;
-        font-size: 0.85em;
-        margin-right: 0.5em;
+        padding: 8px 15px;
+        border-radius: 20px;
         display: inline-block;
-        margin-top: 0.5em;
+        margin: 5px 5px 5px 0;
+        font-size: 13px;
     }
-    </style>
+    .contact-info {
+        background: #f0ebe5;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+    }
+    .contact-link {
+        color: #8b6f47;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .contact-link:hover {
+        color: #6b5537;
+        text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+        .healer-container {
+            flex-direction: column;
+        }
+        .healer-image {
+            flex: 0 0 auto;
+            width: 100%;
+        }
+    }
+</style>
 """, unsafe_allow_html=True)
 
 # Header
-st.title(get_text('healers_title', lang))
-st.markdown(f"### {get_text('healers_subtitle', lang)}")
+st.title("🌺 Meet Our Wellness Practitioners")
+st.markdown("*Honoring both ancestral wisdom and modern healing practices*")
+st.markdown("---")
 
 # Introduction
-st.markdown(get_text('healers_intro', lang))
+st.markdown("""
+<div style='background: linear-gradient(135deg, #f9f7f4 0%, #ffffff 100%); 
+            padding: 25px; border-radius: 12px; border-left: 4px solid #d4a574; margin-bottom: 40px;'>
+    <p style='font-size: 18px; line-height: 1.8; color: #333; margin: 0;'>
+        Our practitioners integrate traditional healing wisdom with contemporary therapeutic approaches, 
+        creating spaces where Latinas can explore wellness practices that honor both their cultural roots 
+        and modern needs. Each practitioner brings unique gifts while centering cultural competency, 
+        community care, and holistic healing.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
-# Healer profiles (you can customize these with real practitioners later)
-healers = [
-    {
-        "name": "Ana María Reyes",
-        "title": "Curandera & Trauma-Informed Coach",
-        "bio": "Ana María bridges generations of healing wisdom passed down from her abuela with contemporary trauma therapy. She specializes in helping people navigate family expectations and cultural identity while honoring ancestral practices of *limpias* (spiritual cleansing) and herbal medicine.",
-        "practices": ["Curanderismo", "Trauma Therapy", "Herbal Medicine", "Energy Healing"]
-    },
-    {
-        "name": "Marisol Delgado, LMFT",
-        "title": "Licensed Therapist & Herbalist",
-        "bio": "As a licensed marriage and family therapist and certified herbalist, Marisol creates a unique healing space where talk therapy meets traditional plant medicine. She understands the specific stressors facing Latina women balancing multiple roles and cultural expectations.",
-        "practices": ["Talk Therapy", "Herbal Remedies", "Family Systems", "CBT"]
-    },
-    {
-        "name": "Yaneli Torres",
-        "title": "Somatic Movement Facilitator & Yoga Instructor",
-        "bio": "Yaneli helps people release stress and trauma held in the body through gentle movement, breathwork, and somatic practices. She weaves traditional Mexican dance and music into her sessions, creating healing experiences that honor our cultural roots while addressing modern burnout.",
-        "practices": ["Somatic Healing", "Yoga", "Breathwork", "Dance Therapy"]
-    },
-    {
-        "name": "Esperanza Medina",
-        "title": "Spiritual Guide & Prayer Circle Leader",
-        "bio": "Esperanza leads prayer circles, meditation groups, and spiritual guidance sessions rooted in *fe* (faith) and community gathering traditions. She creates sacred spaces where people can find peace, connection, and spiritual support during difficult times.",
-        "practices": ["Prayer Circles", "Meditation", "Spiritual Counseling", "Group Rituals"]
-    },
-    {
-        "name": "Dr. Carmen Flores, PsyD",
-        "title": "Clinical Psychologist & Art Therapist",
-        "bio": "Dr. Flores combines clinical psychology with creative expression therapy. She believes healing happens through storytelling, art, music, and creative practices that connect us to our emotions and our culture. Her work is especially powerful for those processing grief and loss.",
-        "practices": ["Clinical Psychology", "Art Therapy", "EMDR", "Creative Expression"]
-    }
-]
-
-# Display healer cards
-for healer in healers:
-    st.markdown(f"""
-        <div class="healer-card">
-            <div class="healer-name">{healer['name']}</div>
-            <div class="healer-title">{healer['title']}</div>
-            <div class="healer-bio">{healer['bio']}</div>
-            <div style="margin-top: 1em;">
-                {''.join([f'<span class="practice-tag">{practice}</span>' for practice in healer['practices']])}
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-# Philosophy section
-st.markdown(f"## {get_text('healing_philosophy', lang)}")
-
-col1, col2 = st.columns(2)
+# Jackie Bravo
+col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.markdown(f"### {get_text('ancestral_wisdom', lang)}")
-    if lang == 'es':
-        st.markdown("""
-        - *Curanderismo* y sanación tradicional
-        - Remedios herbales y medicina de plantas
-        - Oración y prácticas espirituales
-        - Música, danza y rituales culturales
-        - Tradiciones de reunión comunitaria
-        """)
-    else:
-        st.markdown("""
-        - *Curanderismo* & traditional healing
-        - Herbal remedies & plant medicine
-        - Prayer & spiritual practices
-        - Music, dance & cultural rituals
-        - Community gathering traditions
-        """)
+    # Placeholder for Jackie's image
+    st.image("/Users/purvamugdiya/Desktop/VEC/images/Jackie_image.png", use_column_width=True)
 
 with col2:
-    st.markdown(f"### {get_text('modern_approaches', lang)}")
-    if lang == 'es':
-        st.markdown("""
-        - Terapia informada en trauma
-        - Sanación somática y basada en el cuerpo
-        - Atención plena y meditación
-        - Técnicas basadas en evidencia (CBT, EMDR)
-        - Psicoeducación y herramientas de salud mental
-        """)
-    else:
-        st.markdown("""
-        - Trauma-informed therapy
-        - Somatic & body-based healing
-        - Mindfulness & meditation
-        - Evidence-based techniques (CBT, EMDR)
-        - Psychoeducation & mental health tools
-        """)
-
-st.info(get_text('how_this_works_text', lang))
-
-# Call to action
-st.markdown(f"### {get_text('ready_share_story', lang)}")
-
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    if st.button(get_text('submit_button', lang), type="primary", use_container_width=True):
-        st.switch_page("pages/1_Share_Story.py") if hasattr(st, 'switch_page') else None
-
-# Footer
-st.markdown("""
-    <div style="text-align: center; color: #8B9D83; font-size: 0.9em; margin-top: 2em;">
-    💚 This is a community-led healing space<br>
-    We honor all paths to wellness and healing
+    st.markdown("""
+    <div class='healer-name'>Jackie Bravo</div>
+    <div class='healer-title'>Mom, Registered Yoga Teacher 200, Photographer, Co-Founder</div>
+    
+    <div class='healer-bio'>
+        <p>Jackie Bravo is a multifaceted wellness practitioner who brings together her roles as a mother, 
+        certified yoga teacher, photographer, and co-founder of Sol Space Chicago. Her approach to healing 
+        integrates movement, mindfulness, and creative expression.</p>
+        <p>As a 200-hour Registered Yoga Teacher, Jackie creates accessible, heart-centered classes that 
+        honor both traditional yogic wisdom and contemporary wellness practices. Her work emphasizes the 
+        connection between body, mind, and spirit, making yoga accessible to practitioners of all levels.</p>
+        <p>Through Sol Space Chicago, Jackie co-creates a welcoming community space where Latinas can explore 
+        holistic wellness practices in an environment that honors their cultural identity and lived experiences.</p>
     </div>
+    
+    <div style='margin: 20px 0;'>
+        <span class='healer-specialty'>🧘‍♀️ Yoga Instruction</span>
+        <span class='healer-specialty'>📸 Photography</span>
+        <span class='healer-specialty'>🌟 Community Building</span>
+        <span class='healer-specialty'>💚 Mindfulness Practices</span>
+    </div>
+    
+    <div class='contact-info'>
+        <p style='margin: 5px 0;'><strong>📞 Phone:</strong> <a href='tel:773-633-9294' class='contact-link'>773-633-9294</a></p>
+        <p style='margin: 5px 0;'><strong>📧 Email:</strong> <a href='mailto:jackie@solspacechicago.org' class='contact-link'>jackie@solspacechicago.org</a></p>
+        <p style='margin: 5px 0;'><strong>🌐 Website:</strong> <a href='https://solspacechicago.org' target='_blank' class='contact-link'>solspacechicago.org</a></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("<br><br>", unsafe_allow_html=True)
+
+# Luz Alondra
+col1, col2 = st.columns([1, 2])
+
+with col1:
+    # Placeholder for Luz's image
+    st.image("/Users/purvamugdiya/Desktop/VEC/images/Luz_image.png", use_column_width=True)
+
+with col2:
+    st.markdown("""
+    <div class='healer-name'>Luz Alondra</div>
+    <div class='healer-title'>She/Her/Ella • Founder & CEO, Grounded Goddess</div>
+    
+    <div class='healer-bio'>
+        <p>Luz is a 200-hour certified yoga teacher, sound healing practitioner, and cycle syncing educator 
+        devoted to holding grounded, intuitive spaces for embodied healing. As the Founder and CEO of 
+        Grounded Goddess, she believes movement, rest, and ritual are for every body, and that reconnecting 
+        with our natural rhythms is a powerful act of care and resistance.</p>
+        <p>Her philosophy centers on the belief that reconnecting with our natural rhythms—our breath, our 
+        cycles, the moon—is a powerful act of self-care and resistance. Through her work, Luz creates spaces 
+        where individuals can slow down, listen to their bodies, and honor their innate wisdom.</p>
+        <p>Through sound baths, moon circles, cycle syncing workshops, and yoga classes, Luz offers 
+        beginner-friendly experiences that blend structure with softness. Her teachings honor both ancient 
+        wisdom and modern understanding, creating a bridge between traditional practices and contemporary needs.</p>
+    </div>
+    
+    <div style='margin: 20px 0;'>
+        <span class='healer-specialty'>🧘‍♀️ Yoga (200-Hour Certified)</span>
+        <span class='healer-specialty'>🔮 Sound Healing</span>
+        <span class='healer-specialty'>🌙 Moon Circles</span>
+        <span class='healer-specialty'>🌸 Cycle Syncing</span>
+        <span class='healer-specialty'>🎵 Sound Baths</span>
+        <span class='healer-specialty'>💫 Embodied Healing</span>
+    </div>
+    
+    <div class='contact-info'>
+        <p style='margin: 5px 0;'><strong>🌐 Instagram:</strong> <a href='https://instagram.com/thegroundedgoddess' target='_blank' class='contact-link'>@thegroundedgoddess</a></p>
+        <p style='margin: 5px 0;'><strong>📍 Location:</strong> Available for sessions and workshops</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Philosophy Section
+st.markdown("---")
+st.markdown("### 🌿 Our Healing Philosophy")
+
+st.markdown("""
+<div style='background: #f9f7f4; padding: 25px; border-radius: 12px; margin: 20px 0;'>
+    <p style='font-size: 16px; line-height: 1.8; color: #333;'>
+        We believe healing happens at the intersection of ancestral wisdom and modern practices. 
+        Our practitioners honor traditional healing methods—curanderismo, herbal medicine, prayer, 
+        and indigenous practices—while integrating evidence-based approaches like trauma-informed care, 
+        mindfulness, and somatic therapies.
+    </p>
+    <p style='font-size: 16px; line-height: 1.8; color: #333; margin-top: 15px;'>
+        This integration creates a holistic approach that respects cultural identity while offering 
+        contemporary tools for healing. We center community care, recognizing that individual wellness 
+        is deeply connected to collective wellbeing.
+    </p>
+</div>
 """, unsafe_allow_html=True)
+
+# Call to Action
+st.markdown("---")
+st.markdown("""
+<div style='text-align: center; padding: 40px 30px; background: linear-gradient(135deg, #8b6f47 0%, #a0826d 100%); 
+            border-radius: 12px; color: white; margin: 30px 0;'>
+    <h3 style='margin-bottom: 15px; font-size: 28px;'>✨ Ready to Begin Your Healing Journey?</h3>
+    <p style='font-size: 18px; margin-bottom: 25px;'>
+        Share your story anonymously and discover support options that resonate with your needs. 
+        Your voice matters, and you deserve culturally-grounded care.
+    </p>
+</div>
+""", unsafe_allow_html=True)
+
+# Link to Share Story
+col1, col2, col3 = st.columns([1,2,1])
+with col2:
+    if st.button("✍️ Share Your Story", use_container_width=True, type="primary"):
+        st.switch_page("pages/1_Share_Story.py")
